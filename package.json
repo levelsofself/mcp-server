@@ -1,0 +1,23 @@
+{
+  "name": "levels-of-self-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for the Levels of Self self-awareness game - 6,854 interactive scenarios across 7 levels of development",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "self-awareness",
+    "personal-development",
+    "coaching",
+    "game"
+  ],
+  "author": "Arthur Palyan <artpalyan@levelsofself.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/levelsofself/mcp-server"
+  }
+}
