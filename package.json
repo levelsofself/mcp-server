@@ -1,6 +1,6 @@
 {
   "name": "levels-of-self-mcp-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MCP server for the Levels of Self self-awareness game - 6,854 interactive scenarios across 7 levels of development",
   "main": "server.js",
   "scripts": {
@@ -19,5 +19,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/levelsofself/mcp-server"
+  },
+  "mcpName": "io.github.levelsofself/self-awareness-game",
+  "bin": {
+    "levels-of-self-mcp": "./server.js"
   }
 }

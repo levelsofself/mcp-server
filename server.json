@@ -1,0 +1,20 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.levelsofself/self-awareness-game",
+  "description": "Play self-awareness scenarios across 7 levels. 6,800+ coaching scenarios via MCP.",
+  "version": "1.0.1",
+  "repository": {
+    "url": "https://github.com/levelsofself/mcp-server",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "levels-of-self-mcp-server",
+      "version": "1.0.1",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
