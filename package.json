@@ -1,6 +1,6 @@
 {
   "name": "levels-of-self-mcp-server",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "MCP server for the Levels of Self self-awareness game - 6,854 interactive scenarios across 7 levels of development",
   "main": "server.js",
   "bin": {
