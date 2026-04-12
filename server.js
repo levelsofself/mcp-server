@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 const http = require('http');
+const { validateRequest, mcpErrorResponse } = require('./mcp-api-middleware');
+const SERVER_NAME = 'levels-of-self';
 const fs = require('fs');
 const crypto = require('crypto');
 
@@ -345,7 +347,7 @@ function jsonrpcError(id, code, message) {
 const sseConnections = new Map();
 
 // Handle MCP JSON-RPC request
-function handleMCPRequest(body) {
+function handleMCPRequest(body, req) {
   const { method, params, id } = body;
   
   switch (method) {
@@ -367,6 +369,10 @@ function handleMCPRequest(body) {
     
     case 'tools/call': {
       const { name, arguments: args } = params;
+      if (req) {
+        const validation = validateRequest(req, SERVER_NAME, name);
+        if (!validation.allowed) return mcpErrorResponse(id, validation);
+      }
       const result = handleToolCall(name, args || {});
       return jsonrpc(id, {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }]
@@ -400,7 +406,7 @@ const server = http.createServer((req, res) => {
   // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-API-Key');
   
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
@@ -453,7 +459,7 @@ const server = http.createServer((req, res) => {
     req.on('end', () => {
       try {
         const parsed = JSON.parse(body);
-        const response = handleMCPRequest(parsed);
+        const response = handleMCPRequest(parsed, req);
         
         // Send response via SSE if session exists
         const sseRes = sseConnections.get(sessionId);
@@ -478,7 +484,7 @@ const server = http.createServer((req, res) => {
     req.on('end', () => {
       try {
         const parsed = JSON.parse(body);
-        const response = handleMCPRequest(parsed);
+        const response = handleMCPRequest(parsed, req);
         
         if (response) {
           res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -524,7 +530,7 @@ const server = http.createServer((req, res) => {
   res.end(JSON.stringify({ error: 'Not found' }));
 });
 
-server.listen(PORT, '0.0.0.0', () => {
+server.listen(PORT, '127.0.0.1', () => {
   console.log(`[MCP Server] Levels of Self running on port ${PORT}`);
   console.log(`[MCP Server] SSE: /sse | HTTP: /mcp | Health: /health`);
   console.log(`[MCP Server] Protocol: ${MCP_VERSION}`);
